@@ -1,37 +1,39 @@
 class Supergraph < Formula
   desc "Unified code analysis toolkit — semantic graphs, complexity, dead exports, contracts, and more"
   homepage "https://github.com/bravenewxyz/supergraph"
-  version "1.0.3"
+  version "1.0.12"
 
   on_macos do
     on_arm do
       url "https://github.com/bravenewxyz/supergraph/releases/download/v#{version}/supergraph-darwin-arm64.tar.gz"
-      sha256 "a03e881197f2c0daf7926e8e8677e5afc39aa5129c723fc1d7e312e9b4396d96"
+      sha256 "a9fb9ca61056140e5b728930ae4ea35037cafb15db5e0a50b30177358cc1d826"
     end
 
     on_intel do
       url "https://github.com/bravenewxyz/supergraph/releases/download/v#{version}/supergraph-darwin-x64.tar.gz"
-      sha256 "45fd81b2eddf1d4415db12796052f80b037b6e9afa825a296f61eeac545027d4"
+      sha256 "a1a114a482af8123d5bbae95255e67e7977faed5f1fb41533df8ebe694add072"
     end
   end
 
   on_linux do
     on_intel do
       url "https://github.com/bravenewxyz/supergraph/releases/download/v#{version}/supergraph-linux-x64.tar.gz"
-      sha256 "92b7b709a7699aff706e0c14cf70ca56c75657e802aa0748b22e225522889dba"
+      sha256 "869a907664fb1150744496b092eda09c4384e7cf7bb7faa37fac59fa72b68de2"
     end
   end
 
   def install
     bin.install "supergraph"
+    (libexec/"lib").install Dir["lib/*"]
   end
 
   def post_install
     claude_cmd_dir = Pathname.new(Dir.home)/".claude"/"commands"
     claude_cmd_dir.mkpath
-    dest = claude_cmd_dir/"deep-audit.md"
-    url = "https://raw.githubusercontent.com/bravenewxyz/supergraph/master/commands/deep-audit.md"
-    system "curl", "-fsSL", url, "-o", dest.to_s
+    base_url = "https://raw.githubusercontent.com/bravenewxyz/supergraph/master/commands"
+    %w[deep-audit.md high-level.md init-supergraph.md].each do |cmd|
+      system "curl", "-fsSL", "#{base_url}/#{cmd}", "-o", (claude_cmd_dir/cmd).to_s
+    end
 
     supergraph_dir = Pathname.new(Dir.home)/".supergraph"
     supergraph_dir.mkpath
@@ -40,8 +42,8 @@ class Supergraph < Formula
 
   def caveats
     <<~EOS
-      The /deep-audit command for Claude Code has been installed to:
-        ~/.claude/commands/deep-audit.md
+      Claude Code commands installed to ~/.claude/commands/:
+        /deep-audit  /high-level  /init-supergraph
     EOS
   end
 
