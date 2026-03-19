@@ -1,12 +1,12 @@
 class Supergraph < Formula
   desc "Unified code analysis toolkit — semantic graphs, complexity, dead exports, contracts, and more"
   homepage "https://github.com/bravenewxyz/supergraph"
-  version "1.1.16"
+  version "1.1.18"
 
   on_macos do
     on_arm do
       url "https://github.com/bravenewxyz/supergraph/releases/download/v#{version}/supergraph-darwin-arm64.tar.gz"
-      sha256 "b0aecd2839c33b7860d8e70dd440c271fb3ceda6116fec3df3dbd1213305a9d9"
+      sha256 "f3d9aafd3fb1ba04152209de6b14deb509bae440bbdfc9f3bae21591c102b75f"
     end
 
     on_intel do
